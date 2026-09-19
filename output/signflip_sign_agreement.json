@@ -1,0 +1,22 @@
+{
+  "n_cells": 15,
+  "observed_agree_all": 9,
+  "p_all": 0.33866613338666135,
+  "per_fate": {
+    "C1q_inflammatory": {
+      "observed_agree": 4,
+      "p": 0.1875,
+      "p_ge": 0.1875
+    },
+    "Homeostatic": {
+      "observed_agree": 1,
+      "p": 0.1875,
+      "p_ge": 0.96875
+    },
+    "IFN_responsive": {
+      "observed_agree": 4,
+      "p": 0.1875,
+      "p_ge": 0.1875
+    }
+  }
+}

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sfate"
+version = "0.1.0"
+description = "scalable-fate: latent -> approx kNN -> CSR row-stochastic transition graph (M1)"
+authors = [{name="Wei Zeng", email="ericleo_zeng@hotmail.com"}]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pynndescent>=0.5",
+    "scikit-learn>=1.2",
+    "anndata>=0.10",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"

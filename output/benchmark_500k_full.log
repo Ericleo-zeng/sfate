@@ -1,0 +1,7 @@
+2026-09-19T22:46:19.166775 START rep=1 n=500000 k=30 r=30
+2026-09-19T22:46:19.167009 CONFIG column_subset=1
+2026-09-19T22:46:19.339187 STAGE latent_done elapsed=0.172s rss_peak_mb=68.1
+2026-09-19T22:48:08.998394 STAGE graph_done elapsed=109.659s rss_peak_mb=3818.8
+2026-09-19T22:48:09.077219 STAGE absorbing_done elapsed=0.079s rss_peak_mb=3818.8
+2026-09-19T22:48:09.078568 SUBSET selected=1
+2026-09-19T22:48:09.078603 STAGE solve_start elapsed=0.000s rss_peak_mb=3818.8

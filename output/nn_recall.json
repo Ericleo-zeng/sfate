@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-19",
+  "results": [
+    {
+      "name": "fixture_5k_real",
+      "n": 5000,
+      "k": 30,
+      "recalls": [
+        {
+          "seed": 20260907,
+          "recall": 0.980187,
+          "time_s": 22.952
+        },
+        {
+          "seed": 20260909,
+          "recall": 0.98042,
+          "time_s": 0.875
+        },
+        {
+          "seed": 20260911,
+          "recall": 0.98016,
+          "time_s": 0.992
+        }
+      ],
+      "mean_recall": 0.980256,
+      "min_recall": 0.98016,
+      "max_recall": 0.98042,
+      "std_recall": 0.000117
+    },
+    {
+      "name": "synthetic_10k",
+      "n": 10000,
+      "k": 30,
+      "recalls": [
+        {
+          "seed": 20260907,
+          "recall": 0.99453,
+          "time_s": 1.067
+        },
+        {
+          "seed": 20260909,
+          "recall": 0.994547,
+          "time_s": 1.2
+        },
+        {
+          "seed": 20260911,
+          "recall": 0.994523,
+          "time_s": 1.096
+        }
+      ],
+      "mean_recall": 0.994533,
+      "min_recall": 0.994523,
+      "max_recall": 0.994547,
+      "std_recall": 1e-05
+    }
+  ]
+}

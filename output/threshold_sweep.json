@@ -1,0 +1,47 @@
+{
+  "env": {
+    "cellrank": "2.1.0",
+    "seed": 20260909,
+    "n_states": 6,
+    "note": " B eigengap →n_states=6 fit"
+  },
+  "macrostates": [
+    "DAM_like",
+    "IFN_responsive_1",
+    "IFN_responsive_2",
+    "C1q_inflammatory",
+    "Homeostatic_1",
+    "Homeostatic_2"
+  ],
+  "sweep": [
+    {
+      "threshold": 0.9,
+      "n_terminal": 3,
+      "terminal_states": [
+        "Homeostatic_1",
+        "Homeostatic_2",
+        "IFN_responsive_1"
+      ]
+    },
+    {
+      "threshold": 0.93,
+      "n_terminal": 2,
+      "terminal_states": [
+        "Homeostatic_2",
+        "IFN_responsive_1"
+      ]
+    },
+    {
+      "threshold": 0.96,
+      "n_terminal": 1,
+      "terminal_states": [
+        "IFN_responsive_1"
+      ]
+    },
+    {
+      "threshold": 0.99,
+      "n_terminal": 0,
+      "terminal_states": []
+    }
+  ]
+}

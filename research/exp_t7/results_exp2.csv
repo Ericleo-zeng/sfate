@@ -1,0 +1,10 @@
+exp,n,k,metric,conn_dtype,conn_nnz,T_format,T_nnz,T_dtype,T_mem_mb,obsp_after_neighbors,obsp_final,neighbors_s,kernel_s,tracemalloc_peak_mb,rss_delta_mb,dense_n2_mb,rowsum_ok
+2,5000,15,connectivity_kernel,float32,111326,csr_matrix,111326,float64,1.4,connectivities|distances,connectivities|distances,60.76,0.054,60.7,335.6,200.0,True
+2,5000,30,connectivity_kernel,float32,224202,csr_matrix,224202,float64,2.7,connectivities|distances,connectivities|distances,0.29,0.024,14.9,6.3,200.0,True
+2,5000,50,connectivity_kernel,float32,369892,csr_matrix,369892,float64,4.5,connectivities|distances,connectivities|distances,0.35,0.03,24.7,12.8,200.0,True
+2,20000,15,connectivity_kernel,float32,462472,csr_matrix,462472,float64,5.6,connectivities|distances,connectivities|distances,87.84,0.047,105.7,278.9,3200.0,True
+2,20000,30,connectivity_kernel,float32,940208,csr_matrix,940208,float64,11.4,connectivities|distances,connectivities|distances,6.98,0.068,300.1,10.6,3200.0,True
+2,20000,50,connectivity_kernel,float32,1564708,csr_matrix,1564708,float64,18.9,connectivities|distances,connectivities|distances,9.48,0.111,791.2,45.2,3200.0,True
+2,50000,15,connectivity_kernel,float32,1174300,csr_matrix,1174300,float64,14.3,connectivities|distances,connectivities|distances,9.63,0.109,112.9,46.1,20000.0,True
+2,50000,30,connectivity_kernel,float32,2396750,csr_matrix,2396750,float64,29.0,connectivities|distances,connectivities|distances,13.03,0.208,333.3,101.6,20000.0,True
+2,50000,50,connectivity_kernel,float32,4004716,csr_matrix,4004716,float64,48.3,connectivities|distances,connectivities|distances,18.78,0.324,837.9,186.8,20000.0,True

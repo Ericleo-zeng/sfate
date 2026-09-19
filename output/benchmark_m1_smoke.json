@@ -1,0 +1,84 @@
+{
+  "results": [
+    {
+      "name": "fixture_5k_real",
+      "n": 5000,
+      "d": 30,
+      "k": 30,
+      "build_s_max": 1.9,
+      "tracemalloc_peak_mb_max": 285.4,
+      "rss_peak_mb_max": 762.1,
+      "nnz": 251140,
+      "nnz_per_nk": 1.6743,
+      "csr_theory_mb": 2.05
+    },
+    {
+      "name": "synthetic_10k",
+      "n": 10000,
+      "d": 30,
+      "k": 30,
+      "build_s_max": 3.907,
+      "tracemalloc_peak_mb_max": 290.0,
+      "rss_peak_mb_max": 859.0,
+      "nnz": 480054,
+      "nnz_per_nk": 1.6002,
+      "csr_theory_mb": 3.92
+    },
+    {
+      "name": "real_75k_full",
+      "n": 74984,
+      "d": 30,
+      "k": 30,
+      "build_s_max": 18.444,
+      "tracemalloc_peak_mb_max": 426.9,
+      "rss_peak_mb_max": 1413.1,
+      "nnz": 3807850,
+      "nnz_per_nk": 1.6927,
+      "csr_theory_mb": 31.06
+    },
+    {
+      "name": "synthetic_500k",
+      "n": 500000,
+      "d": 30,
+      "k": 30,
+      "build_s_max": 66.162,
+      "tracemalloc_peak_mb_max": 2728.6,
+      "rss_peak_mb_max": 4327.3,
+      "nnz": 25395928,
+      "nnz_per_nk": 1.6931,
+      "csr_theory_mb": 207.17
+    }
+  ],
+  "backend_compare": [
+    {
+      "backend": "pynndescent",
+      "n": 5000,
+      "build_s_max": 1.556
+    },
+    {
+      "backend": "sklearn",
+      "n": 5000,
+      "build_s_max": 0.179
+    },
+    {
+      "backend": "pynndescent",
+      "n": 10000,
+      "build_s_max": 1.803
+    },
+    {
+      "backend": "sklearn",
+      "n": 10000,
+      "build_s_max": 0.433
+    },
+    {
+      "backend": "pynndescent",
+      "n": 74984,
+      "build_s_max": 6.362
+    },
+    {
+      "backend": "sklearn",
+      "n": 74984,
+      "build_s_max": 14.893
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+# sfate(columns , k=30 latent kNN, 6 ) vs CellRank step12 ConnectivityKernel+GPCCAfate  3
+# record=sample_meanrecord=genotype_delta_sign deltasfate_mean/cellrank_mean  delta
+record	sample	genotype	age	fate	sfate_mean	cellrank_mean	delta_sfate_minus_cellrank	sign_agree
+sample_mean	GSM8976271	control	8	IFN_responsive	0.188148	0.316992	-0.128844
+sample_mean	GSM8976271	control	8	C1q_inflammatory	0.170622	0.596940	-0.426318
+sample_mean	GSM8976271	control	8	Homeostatic	0.218425	0.086072	+0.132353
+sample_mean	GSM8976272	5xFAD	8	IFN_responsive	0.191021	0.315746	-0.124725
+sample_mean	GSM8976272	5xFAD	8	C1q_inflammatory	0.177905	0.600600	-0.422695
+sample_mean	GSM8976272	5xFAD	8	Homeostatic	0.217994	0.083658	+0.134336
+sample_mean	GSM8976273	control	8	IFN_responsive	0.192512	0.317420	-0.124909
+sample_mean	GSM8976273	control	8	C1q_inflammatory	0.177508	0.600128	-0.422621
+sample_mean	GSM8976273	control	8	Homeostatic	0.221622	0.082455	+0.139167
+sample_mean	GSM8976274	5xFAD	8	IFN_responsive	0.190261	0.316956	-0.126695
+sample_mean	GSM8976274	5xFAD	8	C1q_inflammatory	0.185713	0.596430	-0.410717
+sample_mean	GSM8976274	5xFAD	8	Homeostatic	0.220721	0.086617	+0.134104
+sample_mean	GSM8976275	5xFAD	3	IFN_responsive	0.193628	0.309684	-0.116056
+sample_mean	GSM8976275	5xFAD	3	C1q_inflammatory	0.187554	0.606946	-0.419391
+sample_mean	GSM8976275	5xFAD	3	Homeostatic	0.224486	0.083374	+0.141112
+sample_mean	GSM8976276	5xFAD;Cd28-cKO	3	IFN_responsive	0.195170	0.310324	-0.115154
+sample_mean	GSM8976276	5xFAD;Cd28-cKO	3	C1q_inflammatory	0.192164	0.607852	-0.415688
+sample_mean	GSM8976276	5xFAD;Cd28-cKO	3	Homeostatic	0.227221	0.081828	+0.145393
+sample_mean	GSM8976277	control	6	IFN_responsive	0.203618	0.309830	-0.106212
+sample_mean	GSM8976277	control	6	C1q_inflammatory	0.175102	0.607022	-0.431919
+sample_mean	GSM8976277	control	6	Homeostatic	0.224729	0.083152	+0.141577
+sample_mean	GSM8976278	5xFAD	6	IFN_responsive	0.192891	0.309666	-0.116775
+sample_mean	GSM8976278	5xFAD	6	C1q_inflammatory	0.191016	0.607577	-0.416561
+sample_mean	GSM8976278	5xFAD	6	Homeostatic	0.223533	0.082761	+0.140773
+sample_mean	GSM8976279	5xFAD;Cd28-cKO	6	IFN_responsive	0.193570	0.310722	-0.117152
+sample_mean	GSM8976279	5xFAD;Cd28-cKO	6	C1q_inflammatory	0.190493	0.606608	-0.416115
+sample_mean	GSM8976279	5xFAD;Cd28-cKO	6	Homeostatic	0.223970	0.082673	+0.141297
+sample_mean	GSM9011862	control	3	IFN_responsive	0.188911	0.308721	-0.119810
+sample_mean	GSM9011862	control	3	C1q_inflammatory	0.178190	0.605464	-0.427274
+sample_mean	GSM9011862	control	3	Homeostatic	0.220505	0.085819	+0.134687
+sample_mean	GSM9011863	5xFAD	3	IFN_responsive	0.191083	0.308671	-0.117587
+sample_mean	GSM9011863	5xFAD	3	C1q_inflammatory	0.182819	0.604415	-0.421596
+sample_mean	GSM9011863	5xFAD	3	Homeostatic	0.223501	0.086918	+0.136583
+sample_mean	GSM9011864	5xFAD;Cd28-cKO	3	IFN_responsive	0.189751	0.309057	-0.119306
+sample_mean	GSM9011864	5xFAD;Cd28-cKO	3	C1q_inflammatory	0.181155	0.603593	-0.422438
+sample_mean	GSM9011864	5xFAD;Cd28-cKO	3	Homeostatic	0.221484	0.087353	+0.134130
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	3	IFN_responsive	+0.003444	+0.000456		True
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	6	IFN_responsive	-0.010728	-0.000164		True
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	8	IFN_responsive	+0.000311	-0.000855		False
+genotype_delta_sign	(cKO-5xFAD)	5xFAD;Cd28-cKO - 5xFAD	3	IFN_responsive	+0.000105	+0.000513		True
+genotype_delta_sign	(cKO-5xFAD)	5xFAD;Cd28-cKO - 5xFAD	6	IFN_responsive	+0.000680	+0.001056		True
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	3	C1q_inflammatory	+0.006997	+0.000217		True
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	6	C1q_inflammatory	+0.015913	+0.000555		True
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	8	C1q_inflammatory	+0.007744	-0.000019		False
+genotype_delta_sign	(cKO-5xFAD)	5xFAD;Cd28-cKO - 5xFAD	3	C1q_inflammatory	+0.001473	+0.000042		True
+genotype_delta_sign	(cKO-5xFAD)	5xFAD;Cd28-cKO - 5xFAD	6	C1q_inflammatory	-0.000523	-0.000969		True
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	3	Homeostatic	+0.003488	-0.000673		False
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	6	Homeostatic	-0.001196	-0.000392		True
+genotype_delta_sign	(5xFAD-control)	5xFAD - control	8	Homeostatic	-0.000666	+0.000874		False
+genotype_delta_sign	(cKO-5xFAD)	5xFAD;Cd28-cKO - 5xFAD	3	Homeostatic	+0.000358	-0.000555		False
+genotype_delta_sign	(cKO-5xFAD)	5xFAD;Cd28-cKO - 5xFAD	6	Homeostatic	+0.000436	-0.000088		False

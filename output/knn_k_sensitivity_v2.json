@@ -1,0 +1,61 @@
+{
+  "env": {
+    "seed": 20260909,
+    "r": 30,
+    "reference": "k=30"
+  },
+  "classes": [
+    "C1q_inflammatory",
+    "DAM_like",
+    "Homeostatic",
+    "IFN_responsive",
+    "PU1low_lymphoid",
+    "Proliferating"
+  ],
+  "rows": [
+    {
+      "k": 15,
+      "graph_s": 26.42,
+      "solve_s": 0.66,
+      "nnz": 126328,
+      "nnz_per_nk": 1.6844,
+      "Linf_vs_k30": 0.5075273513793945,
+      "MAE_vs_k30": 0.01573559975133588,
+      "spearman_min": 0.8840690072206722,
+      "spearman_median": 0.918169134861446
+    },
+    {
+      "k": 30,
+      "graph_s": 1.11,
+      "solve_s": 0.67,
+      "nnz": 251140,
+      "nnz_per_nk": 1.6743,
+      "Linf_vs_k30": 0.0,
+      "MAE_vs_k30": 0.0,
+      "spearman_min": 0.9999999999999999,
+      "spearman_median": 1.0
+    },
+    {
+      "k": 50,
+      "graph_s": 1.51,
+      "solve_s": 0.79,
+      "nnz": 416328,
+      "nnz_per_nk": 1.6653,
+      "Linf_vs_k30": 0.188731849193573,
+      "MAE_vs_k30": 0.00941794928299884,
+      "spearman_min": 0.919261443800238,
+      "spearman_median": 0.9489843579893489
+    },
+    {
+      "k": 100,
+      "graph_s": 2.59,
+      "solve_s": 1.33,
+      "nnz": 821986,
+      "nnz_per_nk": 1.644,
+      "Linf_vs_k30": 0.25407952070236206,
+      "MAE_vs_k30": 0.015528277537102501,
+      "spearman_min": 0.835037939759795,
+      "spearman_median": 0.8949252164439716
+    }
+  ]
+}

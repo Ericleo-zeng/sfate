@@ -1,0 +1,41 @@
+{
+  "env": {
+    "date": "2026-09-10",
+    "cellrank": "2.1.0",
+    "pygpcca": "1.0.4",
+    "scipy": "1.15.3",
+    "numpy": "2.4.2",
+    "blas_threads": "1",
+    "seed": 42,
+    "method_forced": "brandts\uff08\u663e\u5f0f\u6307\u5b9a\uff0c\u5f3a\u5236\u7a20\u5bc6\u56de\u9000\uff09"
+  },
+  "results": [
+    {
+      "n": 2000,
+      "cellrank": "2.1.0",
+      "schur_s": 4.07,
+      "macro_s": 0.26,
+      "tracemalloc_mb": 288.3,
+      "rss_peak_mb": 1010.5,
+      "coef_tracemalloc": 72.1
+    },
+    {
+      "n": 5000,
+      "cellrank": "2.1.0",
+      "schur_s": 43.9,
+      "macro_s": 1.67,
+      "tracemalloc_mb": 1800.6,
+      "rss_peak_mb": 2322.6,
+      "coef_tracemalloc": 72.0
+    },
+    {
+      "n": 8000,
+      "cellrank": "2.1.0",
+      "schur_s": 167.76,
+      "macro_s": 5.71,
+      "tracemalloc_mb": 4609.0,
+      "rss_peak_mb": 4978.4,
+      "coef_tracemalloc": 72.0
+    }
+  ]
+}

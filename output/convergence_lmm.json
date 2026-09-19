@@ -1,0 +1,55 @@
+{
+  "rep_sensitivity_lmm": {
+    "n_obs": 30,
+    "beta_per_doubling": 0.11489247073905307,
+    "beta_95ci_lo": 0.09802829199812034,
+    "beta_95ci_hi": 0.13175664947998578,
+    "r_mean_diff_below_0.05": 10,
+    "r_mean_diff_below_0.02": 100,
+    "model_summary": "        Mixed Linear Model Regression Results\n======================================================\nModel:            MixedLM Dependent Variable: spearman\nNo. Observations: 30      Method:             REML    \nNo. Groups:       6       Scale:              0.0028  \nMin. group size:  5       Log-Likelihood:     31.4099 \nMax. group size:  5       Converged:          Yes     \nMean group size:  5.0                                 \n------------------------------------------------------\n             Coef. Std.Err.   z    P>|z| [0.025 0.975]\n------------------------------------------------------\nIntercept    0.031    0.061  0.511 0.609 -0.088  0.150\nlog2r        0.115    0.009 13.353 0.000  0.098  0.132\nGroup Var    0.011    0.145                           \n======================================================\n"
+  },
+  "knn_k_sensitivity_summary": {
+    "reference_k": 30,
+    "reference_nnz": 251140,
+    "rows": [
+      {
+        "k": 15,
+        "graph_s": 26.42,
+        "solve_s": 0.66,
+        "nnz": 126328,
+        "nnz_per_nk": 1.6844,
+        "Linf_vs_k30": 0.5075273513793945,
+        "MAE_vs_k30": 0.01573559975133588,
+        "spearman_min": 0.8840690072206722,
+        "spearman_median": 0.918169134861446
+      },
+      {
+        "k": 50,
+        "graph_s": 1.51,
+        "solve_s": 0.79,
+        "nnz": 416328,
+        "nnz_per_nk": 1.6653,
+        "Linf_vs_k30": 0.188731849193573,
+        "MAE_vs_k30": 0.00941794928299884,
+        "spearman_min": 0.919261443800238,
+        "spearman_median": 0.9489843579893489
+      },
+      {
+        "k": 100,
+        "graph_s": 2.59,
+        "solve_s": 1.33,
+        "nnz": 821986,
+        "nnz_per_nk": 1.644,
+        "Linf_vs_k30": 0.25407952070236206,
+        "MAE_vs_k30": 0.015528277537102501,
+        "spearman_min": 0.835037939759795,
+        "spearman_median": 0.8949252164439716
+      }
+    ],
+    "mae_range": [
+      0.00941794928299884,
+      0.01573559975133588
+    ],
+    "note": "k=100 shows non-monotonic Spearman decline relative to k=50"
+  }
+}

@@ -1,0 +1,429 @@
+{
+  "env": {
+    "python": "3.12.9",
+    "scipy": "1.15.3",
+    "numpy": "2.4.2",
+    "seed": 20260909,
+    "cellrank_note": "C  CellRank 2.x "
+  },
+  "sfate": {
+    "classes": [
+      "C1q_inflammatory",
+      "DAM_like",
+      "Homeostatic",
+      "IFN_responsive",
+      "PU1low_lymphoid",
+      "Proliferating"
+    ],
+    "gmres_iters": [
+      49951,
+      49921,
+      49942,
+      49912,
+      49911,
+      137
+    ],
+    "residual_max": [
+      1.8905848264694214e-07,
+      1.2945383787155151e-07,
+      1.816079020500183e-07,
+      1.7508864402770996e-07,
+      1.862645149230957e-07,
+      5.052424967288971e-08
+    ],
+    "n_f64_fallback": 5,
+    "n_orphan_dropped": 0,
+    "n_comp": 1,
+    "times": {
+      "load": 0.012259003997314721,
+      "graph": 64.99643066499993,
+      "solve": 3915.1936901630033
+    }
+  },
+  "cell_level": {
+    "n_common": 74984,
+    "n_sf": 74984,
+    "n_cr": 74984,
+    "per_pair": [
+      {
+        "class": "IFN_responsive",
+        "spearman": 0.3199164329486349,
+        "pearson": 0.008510432970532692
+      },
+      {
+        "class": "C1q_inflammatory",
+        "spearman": 0.3282087120233922,
+        "pearson": 0.06236659285324904
+      },
+      {
+        "class": "Homeostatic",
+        "spearman": -0.5676377572583717,
+        "pearson": -0.08535897072389603
+      }
+    ],
+    "unmatched_classes": [
+      "DAM_like",
+      "PU1low_lymphoid",
+      "Proliferating"
+    ],
+    "commitment_score_cr": {
+      "mean": 0.9155005044832701,
+      "frac_ge_08": 0.9981862797396778
+    }
+  },
+  "sample_level": {
+    "ages": [
+      "3",
+      "6",
+      "8"
+    ],
+    "rows": [
+      {
+        "class": "IFN_responsive",
+        "contrast": "5xFAD−control",
+        "ages": [
+          "3",
+          "6",
+          "8"
+        ],
+        "sfate_signs": [
+          1,
+          -1,
+          1
+        ],
+        "cr_signs": [
+          1,
+          -1,
+          -1
+        ],
+        "agree": 2,
+        "total": 3
+      },
+      {
+        "class": "IFN_responsive",
+        "contrast": "cKO−5xFAD",
+        "ages": [
+          "3",
+          "6",
+          "8"
+        ],
+        "sfate_signs": [
+          1,
+          1,
+          null
+        ],
+        "cr_signs": [
+          1,
+          1,
+          null
+        ],
+        "agree": 2,
+        "total": 2
+      },
+      {
+        "class": "C1q_inflammatory",
+        "contrast": "5xFAD−control",
+        "ages": [
+          "3",
+          "6",
+          "8"
+        ],
+        "sfate_signs": [
+          1,
+          1,
+          1
+        ],
+        "cr_signs": [
+          1,
+          1,
+          -1
+        ],
+        "agree": 2,
+        "total": 3
+      },
+      {
+        "class": "C1q_inflammatory",
+        "contrast": "cKO−5xFAD",
+        "ages": [
+          "3",
+          "6",
+          "8"
+        ],
+        "sfate_signs": [
+          1,
+          -1,
+          null
+        ],
+        "cr_signs": [
+          1,
+          -1,
+          null
+        ],
+        "agree": 2,
+        "total": 2
+      },
+      {
+        "class": "Homeostatic",
+        "contrast": "5xFAD−control",
+        "ages": [
+          "3",
+          "6",
+          "8"
+        ],
+        "sfate_signs": [
+          1,
+          -1,
+          -1
+        ],
+        "cr_signs": [
+          -1,
+          -1,
+          1
+        ],
+        "agree": 1,
+        "total": 3
+      },
+      {
+        "class": "Homeostatic",
+        "contrast": "cKO−5xFAD",
+        "ages": [
+          "3",
+          "6",
+          "8"
+        ],
+        "sfate_signs": [
+          1,
+          1,
+          null
+        ],
+        "cr_signs": [
+          -1,
+          -1,
+          null
+        ],
+        "agree": 0,
+        "total": 2
+      }
+    ],
+    "sfate_sample_means": [
+      {
+        "sample": "GSM8976271",
+        "genotype": "control",
+        "age": "8",
+        "C1q_inflammatory": 0.17062239348888397,
+        "DAM_like": 0.1834985762834549,
+        "Homeostatic": 0.2184251844882965,
+        "IFN_responsive": 0.18814848363399506,
+        "PU1low_lymphoid": 0.18194732069969177,
+        "Proliferating": 0.057358235120773315
+      },
+      {
+        "sample": "GSM8976272",
+        "genotype": "5xFAD",
+        "age": "8",
+        "C1q_inflammatory": 0.17790532112121582,
+        "DAM_like": 0.17301219701766968,
+        "Homeostatic": 0.21799451112747192,
+        "IFN_responsive": 0.19102081656455994,
+        "PU1low_lymphoid": 0.1810448318719864,
+        "Proliferating": 0.059022560715675354
+      },
+      {
+        "sample": "GSM8976273",
+        "genotype": "control",
+        "age": "8",
+        "C1q_inflammatory": 0.17750757932662964,
+        "DAM_like": 0.16918466985225677,
+        "Homeostatic": 0.22162184119224548,
+        "IFN_responsive": 0.19251181185245514,
+        "PU1low_lymphoid": 0.18140721321105957,
+        "Proliferating": 0.05776719003915787
+      },
+      {
+        "sample": "GSM8976274",
+        "genotype": "5xFAD",
+        "age": "8",
+        "C1q_inflammatory": 0.18571318686008453,
+        "DAM_like": 0.168902188539505,
+        "Homeostatic": 0.22072149813175201,
+        "IFN_responsive": 0.19026167690753937,
+        "PU1low_lymphoid": 0.17517392337322235,
+        "Proliferating": 0.05922785401344299
+      },
+      {
+        "sample": "GSM8976275",
+        "genotype": "5xFAD",
+        "age": "3",
+        "C1q_inflammatory": 0.18755419552326202,
+        "DAM_like": 0.16224953532218933,
+        "Homeostatic": 0.22448618710041046,
+        "IFN_responsive": 0.1936279982328415,
+        "PU1low_lymphoid": 0.1737653613090515,
+        "Proliferating": 0.05831695348024368
+      },
+      {
+        "sample": "GSM8976276",
+        "genotype": "5xFAD;Cd28-cKO",
+        "age": "3",
+        "C1q_inflammatory": 0.1921638399362564,
+        "DAM_like": 0.15495182573795319,
+        "Homeostatic": 0.22722062468528748,
+        "IFN_responsive": 0.19516994059085846,
+        "PU1low_lymphoid": 0.17093732953071594,
+        "Proliferating": 0.05955669656395912
+      },
+      {
+        "sample": "GSM8976277",
+        "genotype": "control",
+        "age": "6",
+        "C1q_inflammatory": 0.1751023381948471,
+        "DAM_like": 0.15605762600898743,
+        "Homeostatic": 0.22472915053367615,
+        "IFN_responsive": 0.20361869037151337,
+        "PU1low_lymphoid": 0.1828635334968567,
+        "Proliferating": 0.05762891098856926
+      },
+      {
+        "sample": "GSM8976278",
+        "genotype": "5xFAD",
+        "age": "6",
+        "C1q_inflammatory": 0.19101573526859283,
+        "DAM_like": 0.1613306850194931,
+        "Homeostatic": 0.22353316843509674,
+        "IFN_responsive": 0.1928909420967102,
+        "PU1low_lymphoid": 0.1723950207233429,
+        "Proliferating": 0.05883471295237541
+      },
+      {
+        "sample": "GSM8976279",
+        "genotype": "5xFAD;Cd28-cKO",
+        "age": "6",
+        "C1q_inflammatory": 0.19049271941184998,
+        "DAM_like": 0.15905874967575073,
+        "Homeostatic": 0.22396965324878693,
+        "IFN_responsive": 0.1935705989599228,
+        "PU1low_lymphoid": 0.17284800112247467,
+        "Proliferating": 0.06006055325269699
+      },
+      {
+        "sample": "GSM9011862",
+        "genotype": "control",
+        "age": "3",
+        "C1q_inflammatory": 0.1781897395849228,
+        "DAM_like": 0.17772051692008972,
+        "Homeostatic": 0.22050555050373077,
+        "IFN_responsive": 0.18891149759292603,
+        "PU1low_lymphoid": 0.17797552049160004,
+        "Proliferating": 0.05669742822647095
+      },
+      {
+        "sample": "GSM9011863",
+        "genotype": "5xFAD",
+        "age": "3",
+        "C1q_inflammatory": 0.18281938135623932,
+        "DAM_like": 0.1681087613105774,
+        "Homeostatic": 0.22350135445594788,
+        "IFN_responsive": 0.19108369946479797,
+        "PU1low_lymphoid": 0.1757867932319641,
+        "Proliferating": 0.05870026350021362
+      },
+      {
+        "sample": "GSM9011864",
+        "genotype": "5xFAD;Cd28-cKO",
+        "age": "3",
+        "C1q_inflammatory": 0.1811552345752716,
+        "DAM_like": 0.16754892468452454,
+        "Homeostatic": 0.22148370742797852,
+        "IFN_responsive": 0.18975093960762024,
+        "PU1low_lymphoid": 0.17608344554901123,
+        "Proliferating": 0.06397799402475357
+      }
+    ],
+    "n_samples": 12
+  },
+  "pathology": {
+    "crosstab": {
+      "C1q_inflammatory": {
+        "C1q_inflammatory": 13,
+        "Homeostatic": 0,
+        "IFN_responsive_1": 0,
+        "IFN_responsive_2": 0,
+        "IFN_responsive_3": 0,
+        "Proliferating": 0
+      },
+      "DAM_like": {
+        "C1q_inflammatory": 8,
+        "Homeostatic": 8,
+        "IFN_responsive_1": 2,
+        "IFN_responsive_2": 4,
+        "IFN_responsive_3": 6,
+        "Proliferating": 0
+      },
+      "Homeostatic": {
+        "C1q_inflammatory": 3,
+        "Homeostatic": 15,
+        "IFN_responsive_1": 5,
+        "IFN_responsive_2": 3,
+        "IFN_responsive_3": 5,
+        "Proliferating": 0
+      },
+      "IFN_responsive": {
+        "C1q_inflammatory": 5,
+        "Homeostatic": 5,
+        "IFN_responsive_1": 21,
+        "IFN_responsive_2": 21,
+        "IFN_responsive_3": 18,
+        "Proliferating": 0
+      },
+      "PU1low_lymphoid": {
+        "C1q_inflammatory": 0,
+        "Homeostatic": 2,
+        "IFN_responsive_1": 2,
+        "IFN_responsive_2": 1,
+        "IFN_responsive_3": 0,
+        "Proliferating": 0
+      },
+      "Proliferating": {
+        "C1q_inflammatory": 1,
+        "Homeostatic": 0,
+        "IFN_responsive_1": 0,
+        "IFN_responsive_2": 1,
+        "IFN_responsive_3": 1,
+        "Proliferating": 30
+      }
+    },
+    "n_unassigned": 74804,
+    "cr_terminal_states": [
+      "IFN_responsive_2",
+      "IFN_responsive_1",
+      "IFN_responsive_3",
+      "C1q_inflammatory",
+      "Homeostatic"
+    ],
+    "cr_macrostates": [
+      "IFN_responsive_2",
+      "IFN_responsive_1",
+      "IFN_responsive_3",
+      "Proliferating",
+      "C1q_inflammatory",
+      "Homeostatic"
+    ],
+    "cr_unsupported": [
+      "DAM_like",
+      "PU1low_lymphoid"
+    ],
+    "cr_fate_columns": [
+      "fate_IFN_responsive",
+      "fate_C1q_inflammatory",
+      "fate_Homeostatic"
+    ]
+  },
+  "sign_agree": {
+    "agree": 9,
+    "total": 15
+  },
+  "wall_s": 3.648128678993089,
+  "tracemalloc_peak_mb": 112.940256,
+  "rss_sample_peak_mb": 294.600704,
+  "swap": "NAME           TYPE       SIZE USED PRIO\n/swapfile      file      15.6G 348K   -1\n/dev/nvme0n1p7 partition 30.5G 256K   -1"
+}
