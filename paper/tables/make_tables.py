@@ -54,7 +54,7 @@ def main() -> int:
     slepc = (ROOT / "output/slepc_krylov_100k.md").read_text(encoding="utf-8")
     k100_gb = float(re.search(r"1,607,860 KB ≈ ([\d.]+) GiB", slepc).group(1))
     k100_wall = re.search(r"Elapsed wall time \| \*\*([\d:.]+)\*\*", slepc).group(1)
-    k100_schur = float(re.search(r"schur_krylov\*\* \| \*\*([\d.]+)\*\*", slepc).group(1))
+    k100_schur = float(re.search(r"schur_krylov（核心测量）\*\* \| \*\*([\d.]+)\*\*", slepc).group(1))
     k500_gb = float(re.search(r"3,849,808 KB ≈ ([\d.]+) GiB", slepc).group(1))
     k500_wall = re.findall(r"Elapsed wall time \| \*\*([\d:.]+)\*\*", slepc)[1]
     k500_schur = float(re.search(r"\*\*schur_krylov\*\* \| \*\*([\d.]+)\*\*", slepc).group(1))
@@ -79,15 +79,15 @@ def main() -> int:
                 f"{tiers}, pred1m={pred1m}")
 
     c_layer = (ROOT / "output/c_layer_report.md").read_text(encoding="utf-8")
-    gb75_full = float(re.search(r" RSS ≈([\d.]+)\s*GB",
+    gb75_full = float(re.search(r"全链（含求解）进程峰值 RSS ≈([\d.]+)\s*GB",
                                 c_layer).group(1))
     ok &= check("T1-5: 75k full pipeline 1.89 GB", abs(gb75_full - 1.89) < 0.005)
 
     b = (ROOT / "output/b_layer_report.md").read_text(encoding="utf-8")
-    e1 = float(re.search(r" 1E1 .*?L∞ = ([\d.e+-]+)", b).group(1))
-    k_eff = float(re.search(r" 2.*? = \*\*([\d.]+)\*\*", b).group(1))
-    t_eff = float(re.search(r" 3.*? = \*\*([\d.]+)\*\*", b).group(1))
-    e2e = float(re.search(r" Spearman  = \*\*(-?[\d.]+)\*\*", b).group(1))
+    e1 = float(re.search(r"对比 1（E1 交叉验证）.*?L∞ = ([\d.e+-]+)", b).group(1))
+    k_eff = float(re.search(r"对比 2（核效应.*?最小值 = \*\*([\d.]+)\*\*", b).group(1))
+    t_eff = float(re.search(r"对比 3（终末态集效应.*?最小值 = \*\*([\d.]+)\*\*", b).group(1))
+    e2e = float(re.search(r"逐类 Spearman 最小值 = \*\*(-?[\d.]+)\*\*", b).group(1))
     ok &= check("T2-1: B-layer 1.07e-06 / 0.8299 / 0.1359 / -0.3918",
                 abs(e1 - 1.07e-06) < 1e-8 and abs(k_eff - 0.8299) < 5e-5
                 and abs(t_eff - 0.1359) < 5e-5 and abs(e2e + 0.3918) < 5e-5,
@@ -97,8 +97,8 @@ def main() -> int:
         r"IFN_responsive \| ([\d.]+) \| [\d.]+.*?\n\| C1q_inflammatory \| "
         r"([\d.]+) \| [\d.]+.*?\n\| Homeostatic \| (-?[\d.]+)",
         c_layer, re.S).groups()
-    commit = float(re.search(r"commitment_score ([\d.]+)", c_layer).group(1))
-    s4_num, s4_den = re.search(r" delta \*\*(\d+)/(\d+)\*\*",
+    commit = float(re.search(r"commitment_score：均值 ([\d.]+)", c_layer).group(1))
+    s4_num, s4_den = re.search(r"基因型 delta 符号一致：\*\*(\d+)/(\d+)\*\*",
                                c_layer).groups()
     ok &= check("T2-2: C-layer per-cell Spearman + commitment 0.916 + 9/15",
                 abs(float(sp_ifn) - 0.3199) < 5e-5

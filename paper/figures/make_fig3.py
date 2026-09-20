@@ -3,20 +3,20 @@
 """
 make_fig3.py — Fig3: Sensitivity to automatic terminal-state curation.
 
- + assert
-- (a) 75k  × macrostate output/c_layer_report.md §S5
-  " × macrostate " markdown  30
-   74,804 ——CR n_cells=30
-- (b)  min Spearman /output/b_layer_report.md
-  § 2  /  3 2×2  sfate
+数据源（均从文件正则现读 + assert 验证，禁止硬编码）：
+- (a) 75k 注释态 × macrostate 列联表：output/c_layer_report.md §S5
+  （"注释态 × macrostate 列联" markdown 表；口径：每宏观态仅 30 代表细胞，
+  其余 74,804 未指派——CR n_cells=30 口径）
+- (b) 归因消融 min Spearman 及逐类/逐对数值：output/b_layer_report.md
+  §归因消融（对比 2 核效应 / 对比 3 终末态集效应，2×2 统一 sfate 求解器）
 
-assert  warning +  [pending]
-- A1: DAM_like  == [8, 8, 2, 4, 6, 0]
-- A2:  == 3030 /
-- A3:  2 min ∈ [0.829, 0.830]  6  min
-- A4:  3 min ∈ [0.135, 0.136]  6  min
+assert 清单（任一失败：打印 warning + 对应面板标 [pending]，不崩溃）：
+- A1: DAM_like 行 == [8, 8, 2, 4, 6, 0]
+- A2: 列联表每列之和 == 30（30 代表/宏观态口径）
+- A3: 对比 2 min ∈ [0.829, 0.830] 且逐类 6 个值与正文一致（重算 min 吻合）
+- A4: 对比 3 min ∈ [0.135, 0.136] 且逐对 6 个值重算 min 吻合
 
-paper/figures/fig3.png300 dpi+ fig3.pdf assert
+输出：paper/figures/fig3.png（300 dpi）+ fig3.pdf；渲染后打印全部 assert 状态。
 """
 
 from __future__ import annotations
@@ -51,18 +51,18 @@ def check(name: str, ok: bool, detail: str = "") -> bool:
 
 
 # ---------------------------------------------------------------------------
-#  (a)c_layer_report.md §S5
+# 解析 (a)：c_layer_report.md §S5 列联表
 # ---------------------------------------------------------------------------
 
 def parse_contingency() -> tuple[list[str], list[str], np.ndarray]:
     text = C_LAYER_MD.read_text(encoding="utf-8")
     lines = text.splitlines()
     header_i = next(i for i, ln in enumerate(lines)
-                    if ln.strip().startswith("| "))
+                    if ln.strip().startswith("| 注释态"))
     cols = [c.strip() for c in lines[header_i].strip().strip("|").split("|")][1:]
     rows: list[str] = []
     mat: list[list[int]] = []
-    for ln in lines[header_i + 2:]:  #
+    for ln in lines[header_i + 2:]:  # 跳过分隔行
         if not ln.strip().startswith("|"):
             break
         cells = [c.strip() for c in ln.strip().strip("|").split("|")]
@@ -72,22 +72,22 @@ def parse_contingency() -> tuple[list[str], list[str], np.ndarray]:
 
 
 # ---------------------------------------------------------------------------
-#  (b)b_layer_report.md   2 /  3
+# 解析 (b)：b_layer_report.md 归因消融 对比 2 / 对比 3
 # ---------------------------------------------------------------------------
 
 def parse_ablation(text: str, tag: str) -> tuple[float, list[tuple[str, float]]]:
-    """ ( min, [(, ), ...])tag  ' 2'"""
+    """返回 (正文 min, [(名称, 值), ...])。tag 为例 '对比 2'。"""
     ln = next(l for l in text.splitlines() if f"**{tag}" in l and "Spearman" in l)
-    m_min = re.search(r"\s*=\s*\*\*([\d.]+)\*\*", ln)
+    m_min = re.search(r"最小值\s*=\s*\*\*([\d.]+)\*\*", ln)
     stated_min = float(m_min.group(1))
-    paren = re.search(r"(.+?)", ln.split("")[1]).group(1)
+    paren = re.search(r"（(.+?)）", ln.split("最小值")[1]).group(1)
     pairs = [(name, float(v)) for name, v in
-             re.findall(r"([A-Za-z0-9_→]+?)\s+([\d.]+)(?=||$)", paren)]
+             re.findall(r"([A-Za-z0-9_→]+?)\s+([\d.]+)(?=，|）|$)", paren)]
     return stated_min, pairs
 
 
 # ---------------------------------------------------------------------------
-#
+# 面板渲染
 # ---------------------------------------------------------------------------
 
 def panel_a(ax, rows, cols, mat) -> None:
@@ -99,7 +99,7 @@ def panel_a(ax, rows, cols, mat) -> None:
             v = mat[i, j]
             ax.text(j, i, str(v), ha="center", va="center", fontsize=8.5,
                     color="white" if v >= 18 else "#333333")
-    # DAM_like  5
+    # DAM_like 行高亮（散布 5 宏观态）
     dam_i = rows.index("DAM_like")
     ax.add_patch(plt.Rectangle((-0.5, dam_i - 0.5), mat.shape[1], 1,
                                fill=False, edgecolor=C_CLIFF, lw=2.4))
@@ -128,13 +128,13 @@ def panel_b(ax, ab2, ab3) -> None:
     colors = [C_HEAVY, C_CLIFF]
     bars = ax.bar([0, 1], mins, width=0.45, color=colors, alpha=0.75,
                   edgecolor=colors, lw=1.4)
-    #
+    # 条高与现读值一致性校验（渲染日志可见）
     heights = [b.get_height() for b in bars]
     ok_h = all(abs(h - m) < 1e-12 for h, m in zip(heights, mins))
-    check("A5:  ==  min ",
+    check("A5: 消融主条高度 == 现读 min 值",
           ok_h, f"bar heights={heights}, mins={mins}")
     if not ok_h:
-        raise ValueError(f": {heights} vs {mins}")
+        raise ValueError(f"条高与读值不一致: {heights} vs {mins}")
     rng = np.random.default_rng(20260909)
     for x, pts, c in [(0, pts2, C_HEAVY), (1, pts3, C_CLIFF)]:
         vals = [v for _, v in pts]
@@ -142,10 +142,10 @@ def panel_b(ax, ab2, ab3) -> None:
         ax.scatter(np.full(len(vals), x) + jit, vals, s=42, color=c,
                    edgecolor="white", lw=0.7, zorder=3)
     for x, m in zip([0, 1], mins):
-        if m > 0.35:  #
+        if m > 0.35:  # 高条：竖排白字内置
             ax.text(x, m / 2, f"min = {m:.3f}", ha="center", va="center",
                     fontsize=10.5, weight="bold", color="white", rotation=90)
-        else:  #
+        else:  # 矮条：右侧横排
             ax.text(x + 0.26, m, f"min = {m:.3f}", ha="left", va="center",
                     fontsize=10.5, weight="bold", color=colors[x])
     ax.axhline(0.95, color=C_SF, ls="--", lw=1.4)
@@ -175,57 +175,53 @@ def main() -> int:
     fig, (axa, axb) = plt.subplots(1, 2, figsize=(13.4, 6.2),
                                    gridspec_kw={"width_ratios": [1.15, 1.0]})
 
-    # ---- (a)  ----
+    # ---- (a) 列联热图 ----
     try:
         rows, cols, mat = parse_contingency()
-        ok1 = check("A1: DAM_like  == [8,8,2,4,6,0]",
+        ok1 = check("A1: DAM_like 行 == [8,8,2,4,6,0]",
                     mat[rows.index("DAM_like")].tolist() == [8, 8, 2, 4, 6, 0],
                     str(mat[rows.index("DAM_like")].tolist()))
-        ok2 = check("A2:  == 3030 /",
+        ok2 = check("A2: 列联表每列之和 == 30（30 代表/宏观态口径）",
                     bool((mat.sum(axis=0) == 30).all()),
                     str(mat.sum(axis=0).tolist()))
         if not (ok1 and ok2):
-            raise ValueError(" assert ")
+            raise ValueError("列联表 assert 未过")
         panel_a(axa, rows, cols, mat)
     except Exception as e:  # noqa: BLE001
-        print(f"[warning] panel (a) /assert : {e}", file=sys.stderr)
+        print(f"[warning] panel (a) 数据缺失/assert 失败: {e}", file=sys.stderr)
         panel_pending(axa, "(a) 75k contingency", e)
 
-    # ---- (b)  ----
+    # ---- (b) 消融条形图 ----
     try:
         text = B_LAYER_MD.read_text(encoding="utf-8")
-        min2, pts2 = parse_ablation(text, " 2")
-        min3, pts3 = parse_ablation(text, " 3")
-        ok3 = check("A3:  2 min ∈ [0.829,0.830] ",
+        min2, pts2 = parse_ablation(text, "对比 2")
+        min3, pts3 = parse_ablation(text, "对比 3")
+        ok3 = check("A3: 对比 2 min ∈ [0.829,0.830] 且逐类重算吻合",
                     0.829 <= min2 <= 0.830 and len(pts2) == 6
                     and abs(min(v for _, v in pts2) - min2) < 5e-4,
                     f"min={min2}, per-class={[v for _, v in pts2]}")
-        ok4 = check("A4:  3 min ∈ [0.135,0.136] ",
+        ok4 = check("A4: 对比 3 min ∈ [0.135,0.136] 且逐对重算吻合",
                     0.135 <= min3 <= 0.136 and len(pts3) == 6
                     and abs(min(v for _, v in pts3) - min3) < 5e-4,
                     f"min={min3}, per-pair={[v for _, v in pts3]}")
         if not (ok3 and ok4):
-            raise ValueError(" assert ")
+            raise ValueError("消融 assert 未过")
         panel_b(axb, (min2, pts2), (min3, pts3))
     except Exception as e:  # noqa: BLE001
-        print(f"[warning] panel (b) /assert : {e}", file=sys.stderr)
+        print(f"[warning] panel (b) 数据缺失/assert 失败: {e}", file=sys.stderr)
         panel_pending(axb, "(b) 5k ablation", e)
 
-    # ----  footer fig1 ----
+    # ---- 双行 footer（与 fig1 同款）----
     fig.text(0.01, 0.028,
              "Contingency: annotated states × GPCCA macrostates (30 representatives each); "
              "Spearman = per-class minimum; minima are highlighted for orientation, not effect size.",
              fontsize=7.6, color="#666666")
-    fig.text(0.01, 0.005,
-             "Sources: output/c_layer_report.md (S5 contingency) · "
-             "output/b_layer_report.md (2×2 ablation)",
-             fontsize=6.8, color="#888888")
     fig.tight_layout(rect=(0, 0.05, 1, 1))
     fig.savefig(OUT_PNG, dpi=300, facecolor="white")
     fig.savefig(OUT_PDF, facecolor="white")
     print(f"written: {OUT_PNG}\nwritten: {OUT_PDF}")
     n_fail = sum(1 for _, ok, _ in ASSERT_RESULTS if not ok)
-    print(f"assert : {len(ASSERT_RESULTS) - n_fail}/{len(ASSERT_RESULTS)} PASS")
+    print(f"assert 汇总: {len(ASSERT_RESULTS) - n_fail}/{len(ASSERT_RESULTS)} PASS")
     return 0
 
 

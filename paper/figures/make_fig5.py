@@ -16,7 +16,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 FATE_H5AD = ROOT / "output/fate_full_75k.h5ad"
 SRC_H5AD = Path(
-    "<data>/"
+    "/mnt/t9/datasets/ad_microglia_fate_landscape_output/"
     "06_annotation/adata_annotated.h5ad"
 )
 C_LAYER_MD = ROOT / "output/c_layer_report.md"
@@ -27,7 +27,7 @@ C_CLIFF = "#a40000"
 
 
 def parse_cr_uncomparable() -> list[str]:
-    m = re.search(r"CR  fate \[([^\]]+)\]",
+    m = re.search(r"CR 侧无 fate 列的注释类（不可比）：\[([^\]]+)\]",
                   C_LAYER_MD.read_text(encoding="utf-8"))
     return [s.strip().strip("'") for s in m.group(1).split(",")]
 
@@ -97,10 +97,6 @@ def main() -> int:
              f"CR comparable arms: 3 (IFN/C1q/Homeostatic). "
              f"Dataset: Ayata et al. 2025; GEO: GSE296768.",
              fontsize=7.4, color="#666666")
-    fig.text(0.01, 0.003,
-             "Sources: output/fate_full_75k.h5ad · output/c_layer_report.md · "
-             "GEO GSE296768 (UMAP, read-only).",
-             fontsize=6.8, color="#888888")
     fig.savefig(OUT_PNG, dpi=300, facecolor="white")
     fig.savefig(OUT_PDF, facecolor="white")
     print(f"written: {OUT_PNG}\nwritten: {OUT_PDF}")

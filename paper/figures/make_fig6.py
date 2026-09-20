@@ -31,7 +31,7 @@ CONTRAST_SHORT = {"5xFAD - control": "5xFAD−control",
 
 def parse_s4_scores():
     text = C_LAYER_MD.read_text(encoding="utf-8")
-    m = re.search(r" delta \*\*(\d+)/(\d+)\*\*", text)
+    m = re.search(r"基因型 delta 符号一致：\*\*(\d+)/(\d+)\*\*", text)
     total = (int(m.group(1)), int(m.group(2)))
     per = {}
     for ln in text.splitlines():
@@ -147,10 +147,6 @@ def main() -> int:
              "Sign agreement on genotype delta direction; grey = arm not "
              "comparable (no cKO sample at 8M).",
              fontsize=7.6, color="#666666")
-    fig.text(0.01, 0.005,
-             "Sources: output/c_layer_report.md (S4) · "
-             "output/fate_probabilities/fate_by_sample_sfate_vs_cellrank.tsv",
-             fontsize=6.8, color="#888888")
     fig.tight_layout(rect=(0.05, 0.06, 1, 1))
     fig.savefig(OUT_PNG, dpi=300, facecolor="white")
     fig.savefig(OUT_PDF, facecolor="white")

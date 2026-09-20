@@ -16,7 +16,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 M2_MD = ROOT / "output/benchmark_m2.md"
 B_MD = ROOT / "output/b_layer_report.md"
-N_MD = ROOT / "<excluded>"
+N_MD = ROOT / "output/nightly_summary.md"
 CERT_JSON = ROOT / "output/cert_recompute_5k.json"
 OUT_PNG = Path(__file__).resolve().parent / "fig2.png"
 OUT_PDF = Path(__file__).resolve().parent / "fig2.pdf"
@@ -35,13 +35,13 @@ def main() -> int:
 
     a3_linf = float(cert["production_5k"]["Linf_vs_golden"])
     tol = 1e-5
-    row = next(l for l in m2.splitlines() if l.strip().startswith("|  |"))
+    row = next(l for l in m2.splitlines() if l.strip().startswith("| 全量 |"))
     cells = [c.strip() for c in row.strip().strip("|").split("|")]
     gmres_s = float(cells[1])
-    spsolve_s = float(re.search(r" spsolve\(f64\)  \| ([\d.]+)", m2).group(1))
+    spsolve_s = float(re.search(r"黄金标准 spsolve\(f64\) 逐列 \| ([\d.]+)", m2).group(1))
     speedup = spsolve_s / gmres_s
-    recon = float(re.search(r" L∞=([\d.e+-]+)", m2).group(1))
-    e1 = float(re.search(r" 1E1 .*?L∞ = ([\d.e+-]+)", b).group(1))
+    recon = float(re.search(r"两模式对账 L∞=([\d.e+-]+)", m2).group(1))
+    e1 = float(re.search(r"对比 1（E1 交叉验证）.*?L∞ = ([\d.e+-]+)", b).group(1))
     a1_pass = "PASS" in next(l for l in n.splitlines() if "a1 lumping" in l)
 
     fig, ax = plt.subplots(figsize=(10.2, 3.4))
@@ -103,10 +103,6 @@ def main() -> int:
              "L∞ = max |sfate − reference| per cell; tolerance as reported per layer "
              "(a3: 1e-5; other layers record-only, no shared threshold drawn).",
              fontsize=7.6, color="#666666")
-    fig.text(0.01, 0.005,
-             "Sources: output/benchmark_m2.md · output/b_layer_report.md · "
-             "<excluded> · output/cert_recompute_5k.json",
-             fontsize=6.8, color="#888888")
     fig.tight_layout(rect=(0.135, 0.10, 1, 1))
     fig.savefig(OUT_PNG, dpi=300, facecolor="white")
     fig.savefig(OUT_PDF, facecolor="white")
