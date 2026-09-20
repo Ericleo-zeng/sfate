@@ -44,6 +44,12 @@ python scripts/exp_signflip_sign_agreement.py
 
 # Convergence LMM
 python scripts/analyze_convergence_lmm.py
+
+# Latent-representation sensitivity (requires locally prepared source atlas)
+SFATE_SOURCE_H5AD=/path/to/adata_annotated.h5ad python scripts/exp_latent_sensitivity.py
+
+# Representative-selection sensitivity (centroid-nearest vs random-30 x 10 seeds)
+python scripts/exp_rep_selection_sensitivity.py
 ```
 
 `scripts/benchmark_m1_smoke.py` contains the in-script synthetic generators used for the scaling and smoke benchmarks.
