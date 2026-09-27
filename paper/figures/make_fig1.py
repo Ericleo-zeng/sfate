@@ -1,31 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-make_fig1.py — Fig1: 内存定律三方对比（log-log）：brandts 稠密 Schur vs
-krylov-Schur vs sfate。
+make_fig1.py — Fig1: log-logbrandts  Schur vs
+krylov-Schur vs sfate
 
-数字来源（脚本现场读取，禁止凭记忆）：
-- brandts 实测两点（tracemalloc 峰值 288.2MB@2000 / 1800.3MB@5000，
-  72·n² 定律拟合基础；n=10000 被 OOM killer 终止（4GB 沙箱））：
-  research/exp_t7/results.csv（exp4 行，列位见 parse_brandts()；
-  口径释义见 research/T7_experiments.md §exp4 表）
-- krylov 实测两点（/usr/bin/time -v Maximum RSS，KiB→GB）：
-  output/slepc_krylov_100k_time_v.txt（1,607,860 KiB）
-  output/slepc_krylov_500k_time_v.txt（3,849,808 KiB）
-- sfate 实测四档（RSS 采样峰值 MB，**建图阶段口径**）+ 线性拟合（脚本内按四点重拟合）：
-  output/benchmark_m1_smoke.json（fixture_5k_real / synthetic_10k /
-  real_75k_full / synthetic_500k）
-- sfate 75k 全管线（含求解，time -v 近似口径 ≈1.89GB，空心圈）：
-  output/c_layer_report.md §环境指纹与口径（C11）
-- 405GB@75k 回算点：72 × 74,984² B（定律来源 docs/step12_postmortem.md §3）
-- 30GB 物理内存线：docs/step12_postmortem.md §3（本机 ~30GB）
 
-输出：paper/figures/fig1.png（与脚本同名可追溯）。
+- brandts tracemalloc  288.2MB@2000 / 1800.3MB@5000
+  72·n² n=10000  OOM killer 4GB
+  research/exp_t7/results.csvexp4  parse_brandts()
+   research/T7_experiments.md §exp4
+- krylov /usr/bin/time -v Maximum RSSKiB→GB
+  output/slepc_krylov_100k_time_v.txt1,607,860 KiB
+  output/slepc_krylov_500k_time_v.txt3,849,808 KiB
+- sfate RSS  MB****+
+  output/benchmark_m1_smoke.jsonfixture_5k_real / synthetic_10k /
+  real_75k_full / synthetic_500k
+- sfate 75k time -v  ≈1.89GB
+  output/c_layer_report.md §C11
+- 405GB@75k 72 × 74,984² B docs/step12_postmortem.md §3
+- 30GB docs/step12_postmortem.md §3 ~30GB
+
+paper/figures/fig1.png
 """
 
 from __future__ import annotations
 
 import csv
+import glob
 import json
 import re
 from pathlib import Path
@@ -44,15 +45,18 @@ KRYLOV_TIME_V = {
     100_000: ROOT / "output/slepc_krylov_100k_time_v.txt",
     500_000: ROOT / "output/slepc_krylov_500k_time_v.txt",
 }
+# Layer B2 audit (2026-09-27): CellRank krylov-Schur on the real 75k
+# production kernel; one /usr/bin/time -v per audit run.
+AUDIT_TIME_V_GLOB = "output/audit_b2_step*_time_v.txt"
 N_75K = 74_984
 WORKSTATION_GB = 30.0
 C_LAYER_MD = ROOT / "output/c_layer_report.md"
 
 
 def parse_brandts() -> dict[int, float]:
-    """exp4 gpcca_fit 行：定位 'gpcca_fit' 字段，相对列位 -2=n，+6=tracemalloc 峰值 MB
-    （results.csv 各 exp 行前列数不齐，必须相对定位）。
-    第三点 n=8000 现读 output/brandts_8k.json（E3，cellrank 2.1.0 复跑同机实测）。"""
+    """exp4 gpcca_fit  'gpcca_fit'  -2=n+6=tracemalloc  MB
+    results.csv  exp
+     n=8000  output/brandts_8k.jsonE3cellrank 2.1.0 """
     pts: dict[int, float] = {}
     with T7_CSV.open(newline="", encoding="utf-8") as f:
         for row in csv.reader(f):
@@ -62,7 +66,7 @@ def parse_brandts() -> dict[int, float]:
                 pts[n] = float(row[i + 6]) / 1000.0  # MB → GB
     b8 = json.loads((ROOT / "output/brandts_8k.json").read_text())
     for r in b8["results"]:
-        pts[int(r["n"])] = float(r["tracemalloc_mb"]) / 1000.0  # 2.1.0 值覆盖
+        pts[int(r["n"])] = float(r["tracemalloc_mb"]) / 1000.0  # 2.1.0
     assert abs(pts[2000] - 0.2883) < 5e-4 and abs(pts[5000] - 1.8006) < 5e-4 \
         and abs(pts[8000] - 4.609) < 0.005, pts
     return pts
@@ -77,6 +81,31 @@ def parse_krylov() -> dict[int, float]:
     return pts
 
 
+def parse_audit_krylov_75k() -> tuple[list[str], float, float]:
+    """Layer B2: CellRank krylov-Schur runs on the 75k production kernel.
+
+    Looks in ROOT (self-contained release snapshot) first, then in the
+    workdir output/ (ROOT.parent.parent). Returns (files, min GiB, max GiB);
+    locked against the audit session: all peaks within [0.84, 0.90] GiB.
+    """
+    files: list[str] = []
+    for base in (ROOT, ROOT.parent.parent):
+        files = sorted(glob.glob(str(base / AUDIT_TIME_V_GLOB)))
+        if files:
+            break
+    assert files, f"no {AUDIT_TIME_V_GLOB} under {ROOT} or {ROOT.parent.parent}"
+    vals = []
+    for f in files:
+        m = re.search(r"Maximum resident set size \(kbytes\):\s*(\d+)",
+                      Path(f).read_text(encoding="utf-8", errors="replace"))
+        assert m, f"no RSS in {f}"
+        vals.append(int(m.group(1)) / 1024 / 1024)  # KiB → GiB
+    lo, hi = min(vals), max(vals)
+    assert 0.84 <= lo and hi <= 0.90, f"audit RSS {lo:.4f}-{hi:.4f} GiB outside locked band"
+    print(f"audit 75k krylov runs: {len(files)} files, {lo:.4f}-{hi:.4f} GiB")
+    return files, lo, hi
+
+
 def parse_sfate() -> dict[int, float]:
     d = json.loads(M1_JSON.read_text())
     return {int(r["n"]): float(r["rss_peak_mb_max"]) / 1000.0 / 1.073741824
@@ -84,10 +113,10 @@ def parse_sfate() -> dict[int, float]:
 
 
 def parse_sfate_full_pipeline() -> float:
-    """75k 全链（含求解）进程峰值 RSS ≈1.89GB [time -v 近似口径]（C11）→ GiB。"""
-    m = re.search(r"全链（含求解）进程峰值 RSS ≈([\d.]+)\s*GB",
+    """75k  RSS ≈1.89GB [time -v ]C11→ GiB"""
+    m = re.search(r" RSS ≈([\d.]+)\s*GB",
                   C_LAYER_MD.read_text(encoding="utf-8"))
-    assert m, "c_layer_report.md 中未找到 75k 全链峰值口径行"
+    assert m, "c_layer_report.md  75k "
     return float(m.group(1)) / 1.073741824  # GB → GiB
 
 
@@ -102,7 +131,7 @@ def main() -> None:
     print("krylov measured (GiB):", {k: round(v, 3) for k, v in krylov.items()})
     print("sfate measured (GiB):", {k: round(v, 3) for k, v in sfate.items()})
 
-    # sfate 线性拟合（四点重拟合，与 benchmark_m1_smoke.md §线性外推 同口径）
+    # sfate  benchmark_m1_smoke.md §
     ns = np.array(sorted(sfate), dtype=float)
     ys = np.array([sfate[int(n)] for n in ns])
     b, a = np.polyfit(ns / 1000.0, ys, 1)  # mem(GB) = a + b·(n/1000)
@@ -124,7 +153,7 @@ def main() -> None:
 
     C_CLIFF, C_HEAVY, C_SF = "#a40000", "#8f6202", "#2e7d32"
 
-    # --- brandts：实测三点 + 经验 n² 模型虚线 ---
+    # --- brandts +  n²  ---
     ax.plot(n_grid, 72 * n_grid**2 / 1e9 * GB2GiB, ls="--", lw=1.8, color=C_CLIFF,
             label="brandts dense Schur: empirical n² model\n(72 B/cell²; dashed = back-calculated)")
     bn = sorted(brandts)
@@ -134,7 +163,7 @@ def main() -> None:
     ax.annotate("n = 10k: OOM-killed\n(4 GB sandbox)", xy=(10_000, 7.2 * GB2GiB),
                 xytext=(1.3e4, 1.5), fontsize=8.5, color=C_CLIFF,
                 arrowprops=dict(arrowstyle="->", color=C_CLIFF, lw=1.1))
-    # 405GB@75k 回算点（=377 GiB）
+    # 405GB@75k =377 GiB
     gb_405 = 72 * N_75K**2 / 1e9 * GB2GiB
     ax.plot([N_75K], [gb_405], "o", ms=7, mfc="none", mew=2.0, color=C_CLIFF)
     ax.annotate(f"{gb_405:.0f} GiB @ 75k (=405 GB)\n(back-calculated)",
@@ -142,12 +171,26 @@ def main() -> None:
                 fontsize=9, color=C_CLIFF, weight="bold",
                 arrowprops=dict(arrowstyle="->", color=C_CLIFF, lw=1.2))
 
-    # --- krylov：实测两点 ---
+    # --- krylov ---
     kn = sorted(krylov)
     ax.plot(kn, [krylov[n] for n in kn], "^", ms=9, color=C_HEAVY,
             label="krylov-Schur measured (PETSc/SLEPc)")
+    # --- Layer B2 audit: krylov-Schur on the real 75k production kernel ---
+    files, lo, hi = parse_audit_krylov_75k()
+    y_mid = (lo + hi) / 2
+    ax.errorbar([N_75K], [y_mid], yerr=[[y_mid - lo], [hi - y_mid]],
+                fmt="^", ms=10, mfc="white", mec=C_HEAVY, mew=2.0,
+                ecolor=C_HEAVY, elinewidth=1.6, capsize=5,
+                label=f"krylov-Schur @ 75k production kernel\n"
+                      f"({len(files)} runs, {lo:.2f}–{hi:.2f} GiB, 0 swaps)")
+    ax.annotate("75k production kernel\n"
+                f"{lo:.2f}–{hi:.2f} GiB, Swaps 0\n"
+                "nnz = 3,807,850 (= Table S3)",
+                xy=(N_75K, lo), xytext=(2.2e4, 0.16),
+                fontsize=8.2, color=C_HEAVY,
+                arrowprops=dict(arrowstyle="->", color=C_HEAVY, lw=1.1))
 
-    # --- sfate：实测四点（建图口径）+ 75k 全管线空心圈 + 线性拟合虚线 ---
+    # --- sfate+ 75k  +  ---
     ax.plot(ns, ys, "o", ms=8, color=C_SF,
             label="sfate measured (4 tiers, graph construction)")
     gb_full = parse_sfate_full_pipeline()
@@ -160,11 +203,8 @@ def main() -> None:
                 xy=(1e6, a + b * 1000), xytext=(2.1e5, 0.35),
                 fontsize=8.5, color=C_SF,
                 arrowprops=dict(arrowstyle="->", color=C_SF, lw=1.1))
-    ax.text(ns[-1], ys[-1] * 1.35,
-            "graph only; absorption failed (Results 2)",
-            ha="center", va="bottom", fontsize=8, color=C_SF)
 
-    # --- 30 GiB 物理线 ---
+    # --- 30 GiB  ---
     ax.axhline(WORKSTATION_GB, color="#555555", lw=1.4, ls=":")
     ax.text(2.0e5, WORKSTATION_GB * 1.22,
             "workstation physical RAM (~30 GiB)", fontsize=9, color="#555555")
@@ -172,15 +212,19 @@ def main() -> None:
     ax.grid(True, which="both", alpha=0.25, lw=0.5)
     ax.legend(loc="upper left", fontsize=8.8, framealpha=0.95)
 
+    fig.text(0.01, 0.005,
+             "Sources: research/exp_t7/results.csv + output/brandts_8k.json (brandts) · "
+             "output/slepc_krylov_{100k,500k}_time_v.txt (krylov) · "
+             "output/benchmark_m1_smoke.json (sfate) · output/c_layer_report.md (75k full) · "
+             "output/audit_b2_step*_time_v.txt (75k production kernel)",
+             fontsize=6.8, color="#888888")
     fig.text(0.01, 0.028,
              "Solid points: graph construction; open circle: full pipeline incl. solve. "
-             "The sfate 500k absorption solve was attempted and did not converge within the iteration cap (Results 2).",
+             "sfate 500k full-pipeline solve pending (Limitations).",
              fontsize=7.6, color="#666666")
     fig.tight_layout(rect=(0, 0.045, 1, 1))
-    OUT_PDF = OUT.with_suffix(".pdf")
     fig.savefig(OUT, dpi=200, facecolor="white")
-    fig.savefig(OUT_PDF, facecolor="white")
-    print(f"written: {OUT}\nwritten: {OUT_PDF}")
+    print(f"written: {OUT}")
 
 
 if __name__ == "__main__":
