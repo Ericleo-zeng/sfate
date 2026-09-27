@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sfate"
-version = "0.1.0"
+version = "1.1.0"
 description = "scalable-fate: latent -> approx kNN -> CSR row-stochastic transition graph (M1)"
 authors = [{name="Wei Zeng", email="ericleo_zeng@hotmail.com"}]
 requires-python = ">=3.10"
